@@ -1,55 +1,31 @@
-function countIslands(grid) {
-    if (!grid || grid.length === 0) return 0;
-
-    const rows = grid.length;
-    const cols = grid[0].length;
-    let islandCount = 0;
-
-    
-    function dfs(i, j) {
-        
-        if (i < 0 || i >= rows || j < 0 || j >= cols || grid[i][j] === 'W') {
-            return;
-        }
-
-        
-        grid[i][j] = 'W';
-
-       
-        dfs(i + 1, j); 
-        dfs(i - 1, j); 
-        dfs(i, j + 1); 
-        dfs(i, j - 1); 
+const getTotalIsles = function (grid) {
+  if (!grid || grid.length === 0) return 0;
+  
+  const rows = grid.length;
+  const cols = grid[0].length;
+  let islandCount = 0;
+  
+  const dfs = function(r, c) {
+    if (r < 0 || c < 0 || r >= rows || c >= cols || grid[r][c] === 'W') {
+      return;
     }
-
-    
-    for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
-            
-            if (grid[i][j] === 'L') {
-                islandCount++;
-                dfs(i, j); 
-            }
-        }
+    grid[r][c] = 'W';
+    dfs(r - 1, c); // up
+    dfs(r + 1, c); // down
+    dfs(r, c - 1); // left
+    dfs(r, c + 1); // right
+  }
+  
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (grid[r][c] === 'L') {
+        islandCount++;
+        dfs(r, c);
+      }
     }
+  }
+  
+  return islandCount;
+};
 
-    return islandCount;
-}
-
-
-const map1 = [
-    ["L", "L", "L", "L", "W"],
-    ["L", "L", "W", "L", "W"],
-    ["L", "L", "W", "W", "W"],
-    ["W", "W", "W", "W", "W"],
-];
-console.log(countIslands(map1)); 
-
-
-const map2 = [
-    ["L", "L", "W", "W", "W"],
-    ["L", "L", "W", "W", "W"],
-    ["W", "W", "L", "W", "W"],
-    ["W", "W", "W", "L", "L"],
-];
-console.log(countIslands(map2)); 
+module.exports = getTotalIsles;
